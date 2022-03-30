@@ -20,7 +20,33 @@ function scene:create( event )
     background.alpha = 0.5
     sceneGroup:insert( background )
 
-    local options =
+    local function readyButtonEvent( event )
+
+        if ( "ended" == event.phase ) then
+            print( "Button was pressed and released" )
+        end
+    end
+
+    local readyButton = widget.newButton(
+            {
+                width = 240,
+                height = 120,
+                defaultFile = "buttonDefault.png",
+                overFile = "buttonOver.png",
+                label = "button",
+                onEvent = readyButtonEvent
+            }
+    )
+
+    -- Center the button
+    readyButton.x = display.contentCenterX
+    readyButton.y = display.contentCenterY
+
+    -- Change the button's label text
+    readyButton:setLabel( "2-Image" )
+
+
+    local imageFlagOptions =
     {
         -- The params below are required
         width = 600,
@@ -28,18 +54,18 @@ function scene:create( event )
         numFrames = 2,
 
         -- The params below are optional (used for dynamic image selection)
-        sheetContentWidth = 1920,  -- width of original 1x size of entire sheet
-        sheetContentHeight = 1080  -- height of original 1x size of entire sheet
+        sheetContentWidth = 800,  -- width of original 1x size of entire sheet
+        sheetContentHeight = 600  -- height of original 1x size of entire sheet
     }
 
-    local enFlagImageSheet = graphics.newImageSheet( "creatives/settings-interface/en-flag.png", options )
-    local ruFlagImageSheet = graphics.newImageSheet( "creatives/settings-interface/ru-flag.png", options )
-    local frFlagImageSheet = graphics.newImageSheet( "creatives/settings-interface/fr-flag.png", options )
+    local enFlagImageSheet = graphics.newImageSheet( "creatives/settings-interface/en-flag.png", imageFlagOptions)
+    local ruFlagImageSheet = graphics.newImageSheet( "creatives/settings-interface/ru-flag.png", imageFlagOptions)
+    local frFlagImageSheet = graphics.newImageSheet( "creatives/settings-interface/fr-flag.png", imageFlagOptions)
 
     local enFlagImage = display.newImage( enFlagImageSheet, 1 )
     enFlagImage.x = display.contentCenterX
     enFlagImage.y = display.contentCenterY - 200
-    enFlagImage.isVisible = false
+    enFlagImage.isVisible = true
 
     local ruFlagImage = display.newImage( ruFlagImageSheet, 1 )
     ruFlagImage.x = display.contentCenterX
@@ -51,20 +77,30 @@ function scene:create( event )
     frFlagImage.y = display.contentCenterY - 200
     frFlagImage.isVisible = false
 
+    local function flagHiding ()
+        enFlagImage.isVisible = false
+        ruFlagImage.isVisible = false
+        frFlagImage.isVisible = false
+    end
 
 --[[    local enFlag = display.newImage( "creatives/settings-interface/en-flag.png", options )
     enFlag:translate( 100, 100 )]]
 
 
     local function languageChangeFlags (argument1, argument2)
-        if argument2 == 1 then  end
+        if argument2 == 1 then flagHiding () end
+        if argument2 == 1 then enFlagImage.isVisible = true end
+        if argument2 == 2 then flagHiding () end
+        if argument2 == 2 then ruFlagImage.isVisible = true end
+        if argument2 == 3 then flagHiding () end
+        if argument2 == 3 then frFlagImage.isVisible = true end
+
     end
 
-
+    local languageCount = 1
     local function languageChange (argument1, argument2)
-        local languageCount = 1
         if languageCount == 1 and argument2 == (-1) then argument2 = 0 end
-        if languageCount == 2 and argument2 == (1) then argument2 = 0 end
+        if languageCount == 3 and argument2 == (1) then argument2 = 0 end
         languageCount = languageCount + argument2
         languageChangeFlags(argument1, languageCount)
     end
