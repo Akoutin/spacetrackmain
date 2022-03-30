@@ -22,3 +22,34 @@ overlay.anchorX = 0
 overlay.anchorY = 0
 overlay.x, overlay.y = 0, 0
 	]]
+
+-- include Corona's "widget" library
+local widget = require "widget"
+local composer = require "composer"
+local json = require( "json" )
+
+
+-- Data (string) to write
+local saveData = "My app state data"
+
+-- Path for the file to write
+local path = system.pathForFile( "game-settings.txt", system.DocumentsDirectory )
+
+-- Open the file handle
+local file, errorString = io.open( path, "w" )
+
+if not file then
+    -- Error occurred; output the cause
+    print( "File error: " .. errorString )
+else
+    -- Write data to file
+    file:write( saveData )
+    -- Close the file handle
+    io.close( file )
+end
+
+file = nil
+
+-- composer.gotoScene( "menumain.character-screen.character-screen" )
+composer.gotoScene( "menumain.settings.language-selection" )
+
