@@ -9,6 +9,13 @@ local composer = require( "composer" )
 local scene = composer.newScene()
 local widget = require "widget"
 
+local function languageCheck (argument)
+    local text = "entity/events/localization/"..gameLanguage
+    argument = text..argument
+    print(argument)
+    return(argument)
+end
+
 function scene:create( event )
     local sceneGroup = self.view
 
@@ -19,6 +26,10 @@ function scene:create( event )
     background.x, background.y = 0, 0
     background.alpha = 0.5
     sceneGroup:insert( background )
+
+
+    print (languageCheck("text.txt"))
+
 
 end
 

@@ -12,7 +12,7 @@ local widget = require "widget"
 function scene:create( event )
     local sceneGroup = self.view
 
-    --create background image
+    --create BACKGROUND image
     local background = display.newImage( sceneGroup, "creatives/backgrounds/menu-background2.png", display.contentWidth, display.contentHeight )
     background.anchorX = 0
     background.anchorY = 0
@@ -20,32 +20,7 @@ function scene:create( event )
     background.alpha = 0.5
     sceneGroup:insert( background )
 
-    local function readyButtonEvent( event )
-
-        if ( "ended" == event.phase ) then
-            print( "Button was pressed and released" )
-        end
-    end
-
-    local readyButton = widget.newButton(
-            {
-                width = 240,
-                height = 120,
-                defaultFile = "buttonDefault.png",
-                overFile = "buttonOver.png",
-                label = "button",
-                onEvent = readyButtonEvent
-            }
-    )
-
-    -- Center the button
-    readyButton.x = display.contentCenterX
-    readyButton.y = display.contentCenterY
-
-    -- Change the button's label text
-    readyButton:setLabel( "2-Image" )
-
-
+    -- create options for FLAGS IMAGES
     local imageFlagOptions =
     {
         -- The params below are required
@@ -57,6 +32,8 @@ function scene:create( event )
         sheetContentWidth = 800,  -- width of original 1x size of entire sheet
         sheetContentHeight = 600  -- height of original 1x size of entire sheet
     }
+
+    -- create FLAGS IMAGES
 
     local enFlagImageSheet = graphics.newImageSheet( "creatives/settings-interface/en-flag.png", imageFlagOptions)
     local ruFlagImageSheet = graphics.newImageSheet( "creatives/settings-interface/ru-flag.png", imageFlagOptions)
@@ -83,8 +60,59 @@ function scene:create( event )
         frFlagImage.isVisible = false
     end
 
---[[    local enFlag = display.newImage( "creatives/settings-interface/en-flag.png", options )
-    enFlag:translate( 100, 100 )]]
+    -- create locals for buttons
+    local readyButton
+    local languageCount
+    local buttonLeft
+    local buttonRight
+
+
+    -- button's functions
+
+    local function readyButtonEvent( event )
+
+        if ( "ended" == event.phase ) then
+            print( "Button was pressed and released" )
+            if languageCount==1 then composer.gotoScene( "menumain.character-screen.character-screen" )
+            else print(1) end
+
+            composer.removeScene( "menumain.settings.language-selection" )
+            background.isVisible = false
+            display.remove( background )
+            background = nil
+            display.remove( readyButton )
+            readyButton = nil
+            display.remove( buttonLeft )
+            buttonLeft = nil
+            display.remove( buttonRight )
+            buttonRight = nil
+            display.remove( enFlagImage )
+            enFlagImage = nil
+            display.remove( ruFlagImage )
+            ruFlagImage = nil
+            display.remove( frFlagImage )
+            frFlagImage = nil
+        end
+    end
+
+    readyButton = widget.newButton(
+            {
+                width = 440,
+                height = 220,
+                defaultFile = "creatives/settings-interface/ready-lang.png",
+                overFile = "creatives/settings-interface/ready-lang-realised.png",
+                label = "button",
+                onEvent = readyButtonEvent
+            }
+    )
+
+    -- Center the button
+    readyButton.x = display.contentCenterX
+    readyButton.y = display.contentCenterY + 200
+
+    -- Change the button's label text
+    readyButton:setLabel( "2-Image" )
+
 
 
     local function languageChangeFlags (argument1, argument2)
@@ -97,7 +125,7 @@ function scene:create( event )
 
     end
 
-    local languageCount = 1
+    languageCount = 1
     local function languageChange (argument1, argument2)
         if languageCount == 1 and argument2 == (-1) then argument2 = 0 end
         if languageCount == 3 and argument2 == (1) then argument2 = 0 end
@@ -123,7 +151,7 @@ function scene:create( event )
         end
     end
 
-    local buttonLeft = widget.newButton(
+    buttonLeft = widget.newButton(
             {
                 width = 340,
                 height = 170,
@@ -141,7 +169,7 @@ function scene:create( event )
     -- Change the button's label text
     buttonLeft:setLabel( "2-Image" )
 
-    local buttonRight = widget.newButton(
+    buttonRight = widget.newButton(
             {
                 width = 340,
                 height = 170,
@@ -188,16 +216,15 @@ function scene:hide( event )
         -- e.g. stop timers, stop animation, unload sounds, etc.)
     elseif phase == "did" then
         -- Called when the scene is now off screen
+
     end
 end
 
 function scene:destroy( event )
     local sceneGroup = self.view
 
-    -- Called prior to the removal of scene's "view" (sceneGroup)
-    --
-    -- INSERT code here to cleanup the scene
-    -- e.g. remove display objects, remove touch listeners, save state, etc.
+
+
 end
 
 ---------------------------------------------------------------------------------
